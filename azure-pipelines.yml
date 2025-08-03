@@ -1,50 +1,48 @@
-trigger:
+trigger: 
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
+pool: 
+  vmImage: 'ubuntu-16.04'
 
-variables:
-  version: 1.0.2-$(Build.BuildId)
 
 stages:
 - stage: Build_Stage
   displayName: 
   jobs:
   - job: BuildNuget
-    displayName: Build Nuget packages
-    variables:
+    displayName: Build Nuget Packages
+    variables: 
       BuildConfiguration: release
-    steps:
+    steps: 
 
     - task: DotNetCoreCLI@2
-      displayName: Restore Packages
       inputs:
         command: 'restore'
         projects: '**/*.csproj'
         feedsToUse: 'select'
-
+        
     - task: DotNetCoreCLI@2
-      displayName: Build Apps
       inputs:
+        azureSubscription: 'Pay-As-You-Go(1)(66bc95b7-5c49-4ea6-abcc-38ae21688cf2)'
         command: 'build'
         projects: '**/*.csproj'
         arguments: '--configuration $(BuildConfiguration)'
-
-    - script: printenv
-
+        
     - task: DotNetCoreCLI@2
-      displayName: Pack Nuget Package
       inputs:
+        azureSubscription: 'Pay-As-You-Go(1)(66bc95b7-5c49-4ea6-abcc-38ae21688cf2)'
         command: 'pack'
         packagesToPack: '**/*.csproj'
-        versioningScheme: 'byEnvVar'
-        versionEnvVar: 'version'
+        versioningScheme: 'off'
 
     - task: DotNetCoreCLI@2
-      displayName: Push Nuget Package
       inputs:
         command: 'push'
         packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
         nuGetFeedType: 'internal'
-        publishVstsFeed: 'a02513cd-1272-4398-8fd8-5a1473eab7c5/00c683e5-28b9-42ad-a0cf-f0b29cc0b365'
+        publishVstsFeed: '5151abf1-2d0f-46f4-86d2-bc6b9b93b545/c0119e2b-4376-4724-a85a-cf6250207c83'
+
+
+
+
+
